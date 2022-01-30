@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import xml.etree.ElementTree as ET
 
+# 실행마다 chromedriver.exe가 실행되고 브라우저를 끄더라도 쌓임. 자주 사용하는 환경에는 관련하여 코드를 수정하여 사용할 필요가 있음
 # import파일 selenium, pyinstaller
 # xml에서 루트를 가져옴. user태그를 찾음. 속성을 element에 할당
 element = ET.parse('src/userInfo.xml').getroot().find('user').attrib
