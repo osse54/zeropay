@@ -1,0 +1,32 @@
+import sys
+import time
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import xml.etree.ElementTree as ET
+
+# xml에서 루트를 가져옴. user태그를 찾음. 속성을 element에 할당
+element = ET.parse('src/userInfo.xml').getroot().find('user').attrib
+
+bizNo = element.get('biz-number') # 사업자번호 할당
+password = element.get('password') # 비밀번호 할당
+
+"""
+웹드라이버 콘솔창 안띄우기
+venv - lib - site-package - selenium - webdriver - common - service.py 파일열기
+class service -> def start -> try -> self.process = subprocess.popen()
+파라미터 중 creationflags=0x8000000 수정
+"""
+driver = webdriver.Chrome('src/chromedriver.exe') # 웹드라이버 연결
+driver.get('https://www.zeropay.or.kr/UI_HP_005.act') # 로그인 화면으로 이동
+driver.find_element(By.ID, 'iptBizNo').send_keys(bizNo) # 사업자 등록번호
+driver.find_element(By.ID, 'iptPassWord').send_keys(password) # 비밀번호
+driver.find_element(By.ID, 'btnLogin').click() # 로그인 버튼 클릭
+
+time.sleep(1)
+driver.get('https://www.zeropay.or.kr/UI_HP_002_03_01.act') # 결제정보 확인 화면으로 이동
+driver.find_element(By.ID, 'inq_btn').click() # 조회 버튼 클릭
+time.sleep(1)
+driver.execute_script('window.scrollTo(0, 1000);') # 스크롤 이동
+
+sys.exit()
