@@ -4,6 +4,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import xml.etree.ElementTree as ET
+import chromedriver_autoinstaller
 
 # 실행마다 chromedriver.exe가 실행되고 브라우저를 끄더라도 쌓임. 자주 사용하는 환경에는 관련하여 코드를 수정하여 사용할 필요가 있음
 # import파일 selenium, pyinstaller
@@ -12,6 +13,16 @@ element = ET.parse('src/userInfo.xml').getroot().find('user').attrib
 
 bizNo = element.get('biz-number') # 사업자번호 할당
 password = element.get('password') # 비밀번호 할당
+
+
+chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
+driver_path = f'./{chrome_ver}/chromedriver.exe'
+
+if os.path.exists(driver_path):
+    print(f"chrom driver is installed: {driver_path}")
+else:
+    print(f"install the chrome driver(ver: {chrome_ver})")
+    chromedriver_autoinstaller.install(True)
 
 """
 웹드라이버 콘솔창 안띄우기
